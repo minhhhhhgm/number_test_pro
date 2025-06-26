@@ -1,0 +1,87 @@
+{
+  "project_info": {
+    "project_number": "1073524380669",
+    "firebase_url": "https://newsapp-e1932-default-rtdb.firebaseio.com",
+    "project_id": "newsapp-e1932",
+    "storage_bucket": "newsapp-e1932.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073524380669:android:6f028f2570c60969a97f94",
+        "android_client_info": {
+          "package_name": "com.awesomeproject"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbpgTACb81OQ_aw4Lx7MKQXo0OeMIM554"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073524380669:android:86a9952e65570a45a97f94",
+        "android_client_info": {
+          "package_name": "com.thamaraiselvam.numbers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbpgTACb81OQ_aw4Lx7MKQXo0OeMIM554"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073524380669:android:a159ae4c913e1affa97f94",
+        "android_client_info": {
+          "package_name": "net.maikuru.debug"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbpgTACb81OQ_aw4Lx7MKQXo0OeMIM554"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1073524380669:android:5a90f8f18d3a07e5a97f94",
+        "android_client_info": {
+          "package_name": "vn.nal.superapp_dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbpgTACb81OQ_aw4Lx7MKQXo0OeMIM554"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
