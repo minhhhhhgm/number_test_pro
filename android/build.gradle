@@ -1,36 +1,18 @@
-buildscript {
-    repositories {
-        google()
-        maven {
-           url 'https://maven.fabric.io/public'
-        }
-        jcenter()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
-        classpath 'com.google.gms:google-services:4.3.0'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.8.1'
-        classpath 'io.fabric.tools:gradle:1.+'
-    }
-}
-
 allprojects {
     repositories {
         google()
-        jcenter()
-        maven { url 'https://maven.fabric.io/public' }
+        mavenCentral()
     }
 }
 
-rootProject.buildDir = '../build'
+rootProject.buildDir = "../build"
 subprojects {
     project.buildDir = "${rootProject.buildDir}/${project.name}"
 }
 subprojects {
-    project.evaluationDependsOn(':app')
+    project.evaluationDependsOn(":app")
 }
 
-task clean(type: Delete) {
+tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }

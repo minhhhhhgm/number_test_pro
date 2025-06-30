@@ -14,7 +14,7 @@ class BlockSchema {
   }
 
   void generateTargetValue() {
-    target = Common.getRandomNumber(min: 4, max: 25);
+    target = Common.getRandomNumber(min: 4, max: 999);
   }
 
   void generateValues() {

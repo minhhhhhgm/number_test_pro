@@ -67,4 +67,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'newsapp-e1932.appspot.com',
     iosBundleId: 'com.thamaraiselvam.numbers',
   );
+
 }
