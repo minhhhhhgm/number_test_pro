@@ -1,0 +1,17 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build and distribute to Firebase App Distribution"
+  lane :release do
+    sh("fvm flutter clean")
+    sh("fvm flutter pub get")
+    sh("fvm flutter build apk --release")
+
+    firebase_app_distribution(
+      app: "1:1073524380669:android:86a9952e65570a45a97f94",
+      testers: "minhh@nal.vn",
+      release_notes: "Build mới tự động gửi Firebase",
+      apk_path: "../build/app/outputs/flutter-apk/app-release.apk"
+    )
+  end
+end
