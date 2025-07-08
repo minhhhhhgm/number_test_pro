@@ -15,8 +15,8 @@ Widget numberBlock(
         blockDataStream.setCount(index: index, value: value);
       }, // handle your onTap here
       child: Container(
-        width: 120,
-        height: 120,
+        width: 90,
+        height: 90,
         alignment: Alignment(0.0, 0.0),
         decoration: BoxDecoration(
             color: bgColor,
@@ -25,7 +25,7 @@ Widget numberBlock(
         child: Text(
           value.toString(),
           style: TextStyle(
-              color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
+              color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
         ),
       ),
     ),

@@ -5,7 +5,7 @@ class BlockSchema {
   late int value, index, target;
   bool isSelected = false;
   late Color color;
-  final int size = 6;
+  final int size = 9;
   late List<int> blockValues;
 
   BlockSchema() {
@@ -14,13 +14,13 @@ class BlockSchema {
   }
 
   void generateTargetValue() {
-    target = Common.getRandomNumber(min: 4, max: 999);
+    target = Common.getRandomNumber(min: 0, max: 999);
   }
 
   void generateValues() {
-    List<int> combinations = Common.findCombination(this.target, 3);
-    this.blockValues =
-        Common.fillWithRandomValues(combinations, this.target * 2, size);
+    List<int> combinations = Common.findCombination(target, 3);
+    blockValues =
+        Common.fillWithRandomValues(combinations, target * 2, size);
   }
 
   BlockSchema.build(
@@ -29,12 +29,12 @@ class BlockSchema {
   List<BlockSchema> getBlocks() {
     List<BlockSchema> blocksList = [];
 
-    for (var i = 0; i < this.size; i++) {
+    for (var i = 0; i < size; i++) {
       blocksList.add(
         BlockSchema.build(
             color: Common.getRandomColor(),
             index: i,
-            value: this.blockValues[i]),
+            value: blockValues[i]),
       );
     }
 

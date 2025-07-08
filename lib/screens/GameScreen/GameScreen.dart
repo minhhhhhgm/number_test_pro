@@ -203,7 +203,7 @@ class _GameScreenState extends State<GameScreen> {
       alignment: Alignment(0.0, 0.0),
       // color: Colors.grey,
       padding: const EdgeInsets.all(30),
-      child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(6)),
+      child: Wrap(spacing: 40, runSpacing: 40, children: _generateBlocks(9)),
     );
   }
 

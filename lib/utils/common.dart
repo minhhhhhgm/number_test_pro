@@ -15,13 +15,11 @@ class Common {
   static List<List> combo = [];
 
   static int getRandomNumber({required int min, required int max}) {
-    if (min == max) {
-      return min;
-    }
+  final low = min < max ? min : max;
+  final high = max > min ? max : min;
 
-    Random random = Random();
-    return min + random.nextInt(max - min);
-  }
+  return low + Random().nextInt(high - low);
+}
 
   static Color getRandomColor() {
     return list[Common.getRandomNumber(min: 0, max: list.length)];

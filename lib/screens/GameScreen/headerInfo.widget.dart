@@ -7,7 +7,7 @@ Row headerInfo(int secCounter, Map<String, int> gameHistory) {
     children: <Widget>[
       Container(
           padding: const EdgeInsets.only(left: 15, right: 10),
-          width: 200,
+          // width: 200,
           color: blackLowOpacity,
           child: Row(
             children: <Widget>[
