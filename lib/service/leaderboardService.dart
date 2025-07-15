@@ -16,7 +16,7 @@ class LeaderboardService {
   }
 
   Future<Map<String, dynamic>> _formatSetData(Map gameState) async {
-    String? name = await SettingsStore().getKey('name');
+    String? name = await SettingsStore.instance.getKey('name');
 
     // if (name == null) {
     //   name = Common.getRandomName();

@@ -6,7 +6,9 @@ Widget numberBlock(
     required Color bgColor,
     required int index,
     required int value,
-    required BlockDataStream blockDataStream}) {
+    required BlockDataStream blockDataStream,
+    bool isHint = false,
+    bool isRevealed = false}) {
   bool isSelected = false;
   return Material(
     child: InkWell(
@@ -19,8 +21,11 @@ Widget numberBlock(
         height: 90,
         alignment: Alignment(0.0, 0.0),
         decoration: BoxDecoration(
-            color: bgColor,
-            border: Border.all(color: Colors.white, width: 5),
+            color: isRevealed ? Colors.greenAccent : (isHint ? Colors.yellowAccent : bgColor),
+            border: Border.all(
+              color: isRevealed ? Colors.green : Colors.white,
+              width: isRevealed ? 8 : 5,
+            ),
             borderRadius: BorderRadius.circular(10)),
         child: Text(
           value.toString(),

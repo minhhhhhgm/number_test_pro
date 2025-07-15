@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   onDoneLoading() async {
     Navigator.of(context)
-        .pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+        .pushNamedAndRemoveUntil('/home_new', (Route<dynamic> route) => false);
   }
 
   @override
