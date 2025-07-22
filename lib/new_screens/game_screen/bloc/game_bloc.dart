@@ -7,6 +7,7 @@ import 'package:numbers/di/service_locator.dart';
 import 'package:numbers/provider/BlockDataStream.dart';
 import 'package:numbers/service/score_service.dart';
 import 'package:numbers/service/sound_service.dart';
+import 'package:numbers/utils/game_config.dart';
 
 import '../../../schema/BlockSchema.dart';
 import 'game_event.dart';
@@ -18,10 +19,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final blockDataStream = getIt<BlockDataStream>();
   final soundService = getIt<MainSoundService>();
   final scoreService = getIt<ScoreService>();
+  final config = getIt<GameConfig>();
 
   Timer? _timer;
   double currentTotal = 0;
   int totalScore = 0;
+  int correctAnswers = 0;
+  int wrongAnswers = 0;
   StreamSubscription<Map<String, int>>? _blockDataSubscription;
 
   GameBloc() : super(GameState.initial()) {
@@ -31,8 +35,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<HintUsed>(_onHintUsed);
     on<TimerTicked>(_onTimerTicked);
     on<NextTurn>(_onNextTurn);
-    on<GameEnded>(_onGameEnded);
+    // on<GameEnded>(_onGameEnded);
+    on<AddTime>(_onAddTime);
+    on<PlayAgain>(_onPlayAgain);
+    on<GameDone>(_onGameDone);
     on<ValidateBlocksEvent>(_onValidateBlocks);
+
     _blockDataSubscription = blockDataStream.stream.listen((data) {
       if (!isClosed) {
         add(ValidateBlocksEvent(blockData: data));
@@ -63,28 +71,37 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       updatedList[selectedIndex] = updatedBlock.copyWith(color: Colors.green);
 
       if (!isThereChanceToMakeItCorrect()) {
+        wrongAnswers += 1;
         updatedList[selectedIndex] = updatedBlock.copyWith(color: Colors.red);
         emit(state.copyWith(
             blocksNew: updatedList,
             triggerAnswerQuestion: !state.triggerAnswerQuestion,
             isInCorrectAnswer: true,
-            isCorrectAnswer: false));
+            isCorrectAnswer: false,
+            wrongAnswers: wrongAnswers));
         return;
       }
     } else if (currentTotal == blockSchemaNew.target) {
       updatedList[selectedIndex] = updatedBlock.copyWith(color: Colors.green);
       totalScore += 1;
+      correctAnswers += 1;
+      log('correctAnswers $correctAnswers score : ${totalScore * config.pointBonus}');
+      log('config.pointBonus ${config.pointBonus}');
+
       emit(state.copyWith(
           triggerAnswerQuestion: !state.triggerAnswerQuestion,
           isCorrectAnswer: true,
           isInCorrectAnswer: false,
-          score: totalScore));
+          score: totalScore * config.pointBonus,
+          correctAnswers: correctAnswers));
     } else {
+      wrongAnswers += 1;
       updatedList[selectedIndex] = updatedBlock.copyWith(color: Colors.red);
       emit(state.copyWith(
           triggerAnswerQuestion: !state.triggerAnswerQuestion,
           isInCorrectAnswer: true,
-          isCorrectAnswer: false));
+          isCorrectAnswer: false,
+          wrongAnswers: wrongAnswers));
     }
 
     emit(state.copyWith(blocksNew: updatedList));
@@ -125,60 +142,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     currentTotal = 0;
 
     emit(state.copyWith(
-      target: blockSchemaNew.target,
-      blocksNew: blocks,
-      hintCount: 0
-    ));
+        target: blockSchemaNew.target, blocksNew: blocks, hintCount: 0));
   }
 
   Future<void> _onBlockSelected(
       BlockSelected event, Emitter<GameState> emit) async {
     blockDataStream.setCount(index: event.index, value: event.value);
-    // if (state.isTimeUp || state.status != GameStatus.playing) return;
-    // final selectedIndexes = List<int>.from(state.selectedIndexes)
-    //   ..add(event.index);
-    // final currentTotal = state.currentTotal + event.value;
-    // final isCorrect = currentTotal == state.target;
-    // final isOver = currentTotal > state.target;
-    // List<BlockSchema> updatedBlocks = List.from(state.blocks);
-    // updatedBlocks[event.index].isSelected = true;
-    // if (isCorrect) {
-    //   await soundService.playCorrect();
-    //   await achievementService.onGameWin(
-    //       score: state.score,
-    //       timeLeft: state.secCounter,
-    //       usedHints: state.hintCount > 0,
-    //       powerUpsUsed: state.isDoubleScoreActive ? 1 : 0);
-    //   emit(state.copyWith(
-    //       selectedIndexes: selectedIndexes,
-    //       currentTotal: currentTotal,
-    //       blocks: updatedBlocks,
-    //       score: state.score + 10, // ví dụ cộng điểm
-    //       status: GameStatus.win,
-    //       message: 'Chính xác!'));
-    //   _timer?.cancel();
-    //   // Cập nhật điểm, leaderboard, v.v.
-    //   await bestScoreStore.updateScore(state.score + 10);
-    //   await recentScoreStore.updateRecentScore(state.score + 10);
-    //   await leaderboardService.setData({'score': state.score + 10});
-    // } else if (isOver) {
-    //   await soundService.playWrong();
-    //   emit(state.copyWith(
-    //       selectedIndexes: selectedIndexes,
-    //       currentTotal: currentTotal,
-    //       blocks: updatedBlocks,
-    //       status: GameStatus.lose,
-    //       message: 'Sai!'));
-    //   _timer?.cancel();
-    //   await achievementService.onGameLoss();
-    // } else {
-    //   await soundService.playBlockSelect();
-    //   emit(state.copyWith(
-    //     selectedIndexes: selectedIndexes,
-    //     currentTotal: currentTotal,
-    //     blocks: updatedBlocks,
-    //   ));
-    // }
   }
 
   // Future<void> _onPowerUpUsed(
@@ -220,18 +189,19 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<void> _onHintUsed(HintUsed event, Emitter<GameState> emit) async {
     if (state.blocksNew.isEmpty) return;
 
+    int nextHintCount = state.hintCount + 1;
+
     final combination = state.blocksNew.first.correctCombination;
 
-    if (state.hintCount >= combination.length) return;
+    if (state.hintCount >= combination.length) nextHintCount = 1;
 
-    final nextHintCount = state.hintCount + 1;
-    final hintNumbers = combination.take(nextHintCount).toList();
-
-    log('Hint numbers: $hintNumbers');
+    final hintNumbers =
+        combination.take(nextHintCount).toList()[nextHintCount - 1];
 
     final updatedBlocks = state.blocksNew.map((block) {
-      final shouldHint = hintNumbers.contains(block.value);
-      return block.copyWith(isHint: shouldHint);
+      final shouldHint = hintNumbers == block.value;
+      return block.copyWith(
+          isHint: shouldHint, triggerHint: !block.triggerHint);
     }).toList();
 
     emit(state.copyWith(
@@ -242,14 +212,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onTimerTicked(TimerTicked event, Emitter<GameState> emit) async {
     if (state.secCounter <= 0) {
-      emit(state.copyWith(isTimeUp: true, message: 'Hết giờ!'));
       _timer?.cancel();
-      await scoreService.saveScore(total: totalScore);
-      final score = await scoreService.getScore();
-
-      blockDataStream.setScore(score: score ?? 0);
-
-      log('RUN SET SCORE');
+      // await Future.delayed(Duration(seconds: 2));
+      emit(state.copyWith(isTimeUp: true, message: 'Hết giờ!'));
+      await soundService.stopBackgroundMusic();
+      await soundService.pauseEffectSound();
     } else {
       emit(state.copyWith(secCounter: state.secCounter - 1));
     }
@@ -259,9 +226,32 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     _fillBlocksData(emit);
   }
 
-  void _onGameEnded(GameEnded event, Emitter<GameState> emit) {
-    _timer?.cancel();
-    emit(state.copyWith(status: GameStatus.summary));
+  void _onAddTime(AddTime event, Emitter<GameState> emit) {
+    emit(state.copyWith(
+        secCounter: state.secCounter + 20,
+        triggerCountdown: !state.triggerCountdown));
+  }
+
+  void _onPlayAgain(PlayAgain event, Emitter<GameState> emit) async {
+    totalScore = 0;
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    emit(state.copyWith(
+        triggerCountdown: !state.triggerCountdown,
+        secCounter: config.timePlay,
+        score: 0,
+        isTimeUp: false));
+    add(GameStarted());
+    await soundService.playBackgroundMusic();
+  }
+
+  void _onGameDone(GameDone event, Emitter<GameState> emit) async {
+    await scoreService.saveScore(total: totalScore * config.pointBonus);
+    final score = await scoreService.getScore();
+    // final point = await scoreService.getPoint();
+
+    blockDataStream.setScore(score: score ?? 0);
+    // blockDataStream.setPoint(point: point ?? 0);
   }
 
   @override
@@ -269,10 +259,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     _timer?.cancel();
     _blockDataSubscription?.cancel();
     soundService.stopBackgroundMusic();
-    // if (soundService.isPlaying) {
-    //   log('Stop sound');
-    //   soundService.stopBackgroundMusic();
-    // }
     return super.close();
   }
 }

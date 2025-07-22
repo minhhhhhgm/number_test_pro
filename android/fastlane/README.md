@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Build and distribute to Firebase App Distribution
 
+### android release_abb
+
+```sh
+[bundle exec] fastlane android release_abb
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

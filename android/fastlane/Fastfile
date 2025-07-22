@@ -2,6 +2,7 @@ default_platform(:android)
 
 platform :android do
   desc "Build and distribute to Firebase App Distribution"
+  # fastlane release
   lane :release do
     sh("fvm flutter clean")
     sh("fvm flutter pub get")
@@ -12,6 +13,19 @@ platform :android do
       testers: "minhh@nal.vn",
       release_notes: "Build mới tự động gửi Firebase",
       apk_path: "../build/app/outputs/flutter-apk/app-release.apk"
+    )
+  end
+  # fastlane release_abb
+  lane :release_abb do
+    sh("fvm flutter clean")
+    sh("fvm flutter pub get")
+    sh("fvm flutter build appbundle --release")
+
+    firebase_app_distribution(
+      app: "1:1073524380669:android:86a9952e65570a45a97f94",
+      testers: "minhh@nal.vn",
+      release_notes: "Build AAB mới tự động gửi Firebase",
+      android_artifact_path: "../build/app/outputs/bundle/release/app-release.aab"
     )
   end
 end

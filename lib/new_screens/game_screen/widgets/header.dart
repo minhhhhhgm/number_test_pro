@@ -1,10 +1,20 @@
 part of '../game_screen.dart';
 
 class _Header extends StatelessWidget {
-  const _Header({required this.secCounter, required this.score});
+  const _Header(
+      {required this.secCounter,
+      required this.score,
+      required this.textColor,
+      required this.backgroundColorCountDown,
+      required this.foregroundColorCountDown,
+      required this.borderColor});
 
   final int secCounter;
   final int score;
+  final Color textColor,
+      borderColor,
+      backgroundColorCountDown,
+      foregroundColorCountDown;
 
   @override
   Widget build(BuildContext context) {
@@ -17,33 +27,46 @@ class _Header extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
+              height: 35,
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Color(0xFFbecaa1), width: 2),
+                  border: Border.all(color: borderColor, width: 2),
                   borderRadius: BorderRadius.circular(8)),
               child: Text(
-                secCounter.toString().padLeft(2, '0') + ':00',
-                style: TextStyle(
-                    color: Color(0xFF647c29), fontWeight: FontWeight.bold),
+                secCounter.toString().padLeft(2, '0') + '(s)',
+                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(
               width: 16,
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              height: 35,
+              padding: EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(color: Color(0xFFbecaa1), width: 2),
+                  border: Border.all(color: borderColor, width: 2),
                   borderRadius: BorderRadius.circular(8)),
               child: BlocSelector<GameBloc, GameState, int>(
                 selector: (state) => state.score,
                 builder: (context, score) {
-                  return Text(
-                    'Point : $score',
-                    style: TextStyle(
-                        color: Color(0xFF647c29), fontWeight: FontWeight.bold),
+                  return Row(
+                    children: [
+                      Image.asset(
+                        'assets/icon/star.png',
+                        width: 24,
+                        height: 24,
+                      ),
+                      SizedBox(
+                        width: 2,
+                      ),
+                      Text(
+                        '$score',
+                        style: TextStyle(
+                            color: textColor, fontWeight: FontWeight.bold),
+                      )
+                    ],
                   );
                 },
               ),
@@ -55,12 +78,15 @@ class _Header extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: BlocSelector<GameBloc, GameState, int>(
-            selector: (state) => state.secCounter,
-            builder: (context, secCounter) {
+          child: BlocSelector<GameBloc, GameState, (int, bool)>(
+            selector: (state) => (state.secCounter, state.triggerCountdown),
+            builder: (context, state) {
               return CountdownBar(
-                durationInSeconds: secCounter,
+                key: ValueKey('${state.$2}'),
+                durationInSeconds: state.$1,
                 onFinish: () {},
+                backgroundColor: backgroundColorCountDown,
+                foregroundColor: foregroundColorCountDown,
               );
             },
           ),
@@ -95,7 +121,10 @@ class _CountdownBarState extends State<CountdownBar>
   @override
   void initState() {
     super.initState();
+    _startAnimation(widget.durationInSeconds);
+  }
 
+  void _startAnimation(int durationInSeconds) {
     _controller = AnimationController(
       vsync: this,
       duration: Duration(seconds: widget.durationInSeconds),

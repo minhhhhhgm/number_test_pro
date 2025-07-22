@@ -64,18 +64,19 @@ class BlockSchemaNew extends Equatable {
   final List<int> correctCombination;
   final bool isHint;
   final bool isRevealed;
+  final bool triggerHint;
 
-  const BlockSchemaNew({
-    this.value = 0,
-    this.index = 0,
-    this.target = 0,
-    this.color,
-    this.isSelected = false,
-    this.isHint = false,
-    this.isRevealed = false,
-    this.blockValues = const [],
-    this.correctCombination = const [],
-  });
+  const BlockSchemaNew(
+      {this.value = 0,
+      this.index = 0,
+      this.target = 0,
+      this.color,
+      this.isSelected = false,
+      this.isHint = false,
+      this.isRevealed = false,
+      this.blockValues = const [],
+      this.correctCombination = const [],
+      this.triggerHint = false});
 
   factory BlockSchemaNew.random() {
     final target =
@@ -96,38 +97,38 @@ class BlockSchemaNew extends Equatable {
   List<BlockSchemaNew> generateBlocks({int? target}) {
     return List.generate(config.blockSize, (index) {
       return BlockSchemaNew(
-        value: blockValues[index],
-        index: index,
-        target: this.target,
-        color: Color(0xFFbec697),
-        blockValues: blockValues,
-        correctCombination: correctCombination,
-      );
+          value: blockValues[index],
+          index: index,
+          target: this.target,
+          color: Color(0xFFbec697),
+          blockValues: blockValues,
+          correctCombination: correctCombination,
+          triggerHint: false);
     });
   }
 
-  BlockSchemaNew copyWith({
-    int? value,
-    int? index,
-    int? target,
-    bool? isSelected,
-    Color? color,
-    List<int>? blockValues,
-    List<int>? correctCombination,
-    bool? isHint,
-    bool? isRevealed,
-  }) {
+  BlockSchemaNew copyWith(
+      {int? value,
+      int? index,
+      int? target,
+      bool? isSelected,
+      Color? color,
+      List<int>? blockValues,
+      List<int>? correctCombination,
+      bool? isHint,
+      bool? isRevealed,
+      bool? triggerHint}) {
     return BlockSchemaNew(
-      value: value ?? this.value,
-      index: index ?? this.index,
-      target: target ?? this.target,
-      isSelected: isSelected ?? this.isSelected,
-      color: color ?? this.color,
-      blockValues: blockValues ?? this.blockValues,
-      correctCombination: correctCombination ?? this.correctCombination,
-      isHint: isHint ?? this.isHint,
-      isRevealed: isRevealed ?? this.isRevealed,
-    );
+        value: value ?? this.value,
+        index: index ?? this.index,
+        target: target ?? this.target,
+        isSelected: isSelected ?? this.isSelected,
+        color: color ?? this.color,
+        blockValues: blockValues ?? this.blockValues,
+        correctCombination: correctCombination ?? this.correctCombination,
+        isHint: isHint ?? this.isHint,
+        isRevealed: isRevealed ?? this.isRevealed,
+        triggerHint: triggerHint ?? this.triggerHint);
   }
 
   @override
@@ -140,6 +141,7 @@ class BlockSchemaNew extends Equatable {
         blockValues,
         correctCombination,
         isHint,
-        isRevealed
+        isRevealed,
+        triggerHint
       ];
 }

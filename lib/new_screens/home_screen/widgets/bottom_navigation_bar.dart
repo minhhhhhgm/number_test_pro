@@ -12,7 +12,7 @@ class _BottomNavigationBar extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           showUnselectedLabels: true,
           backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue,
+          selectedItemColor: Color(0xFFF0E0B8).withOpacity(0.7),
           unselectedItemColor: Colors.grey,
           selectedLabelStyle: TextStyle(
             fontWeight: FontWeight.bold,
@@ -72,13 +72,13 @@ class _BottomNavigationBar extends StatelessWidget {
       ),
       child: Container(
         decoration: BoxDecoration(
-            color: selectedIndex == index ? Color(0xFFc5e6f4) : null,
+            color: selectedIndex == index ? Color(0xFFF0E0B8).withOpacity(0.7) : null,
             borderRadius: BorderRadius.circular(30)),
         padding: EdgeInsets.all(16),
         margin: EdgeInsets.only(top: 8),
         child: Image.asset(
           imagePath,
-          color: selectedIndex == index ? Colors.blue : Color(0xFFb1b1b1),
+          color: Color(0xFFb1b1b1),
           width: 24,
         ),
       ),

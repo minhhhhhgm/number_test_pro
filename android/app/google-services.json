@@ -27,6 +27,25 @@
     },
     {
       "client_info": {
+        "mobilesdk_app_id": "1:1073524380669:android:5f5ba3ea78ca7e2ea97f94",
+        "android_client_info": {
+          "package_name": "com.minhh.numbers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbpgTACb81OQ_aw4Lx7MKQXo0OeMIM554"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:1073524380669:android:86a9952e65570a45a97f94",
         "android_client_info": {
           "package_name": "com.thamaraiselvam.numbers"

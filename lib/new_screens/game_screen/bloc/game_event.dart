@@ -1,5 +1,3 @@
-
-
 abstract class GameEvent {}
 
 class GameStarted extends GameEvent {
@@ -25,6 +23,12 @@ class TimerTicked extends GameEvent {}
 class NextTurn extends GameEvent {}
 
 class GameEnded extends GameEvent {}
+
+class AddTime extends GameEvent {}
+
+class PlayAgain extends GameEvent {}
+
+class GameDone extends GameEvent {}
 
 class ValidateBlocksEvent extends GameEvent {
   final Map<String, int> blockData;

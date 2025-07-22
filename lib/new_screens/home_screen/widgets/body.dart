@@ -16,9 +16,13 @@ class _Body extends StatelessWidget {
         controller: context.read<HomeBloc>().pageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
-          RankScreen(),
           _BodyHome(),
-          GameScreen(),
+          RankScreen(),
+          SettingsUIDemoScreen(),
+          // ScreenLeader()
+          // LeaderBoardScreen()
+          // SizedBox.shrink()
+          // GameScreen(),
           // HomeScreen(),
         ],
       ),

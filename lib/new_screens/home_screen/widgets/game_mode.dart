@@ -83,7 +83,7 @@ class _GameMode extends StatelessWidget {
                         SizedBox(
                           width: 6,
                         ),
-                        Text('Play')
+                        Text('play'.tr())
                       ],
                     ),
                   )
@@ -93,7 +93,6 @@ class _GameMode extends StatelessWidget {
             Image.asset(
               iconGamePath,
               height: 100,
-              color: Colors.white,
             ),
           ],
         ),

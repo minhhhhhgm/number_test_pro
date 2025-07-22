@@ -2,14 +2,19 @@ part of '../game_screen.dart';
 
 class _NumberBlocks extends StatelessWidget {
   final List<BlockSchemaNew> blocks;
-  const _NumberBlocks({required this.blocks});
+  final Color textColor, borderColor;
+
+  const _NumberBlocks(
+      {required this.blocks,
+      required this.textColor,
+      required this.borderColor});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
           color: Colors.white,
-          border: Border.all(color: Color(0xFFbecaa1), width: 3),
+          border: Border.all(color: borderColor, width: 3),
           borderRadius: BorderRadius.circular(16)),
       padding: EdgeInsets.all(30),
       child: Wrap(
@@ -22,7 +27,8 @@ class _NumberBlocks extends StatelessWidget {
             index: i,
             value: block.value,
             isHint: block.isHint,
-            isRevealed: block.isRevealed,
+            isSelected: block.isSelected,
+            triggerHint: block.triggerHint,
             onTap: () {
               if (!block.isSelected) {
                 context
@@ -37,34 +43,40 @@ class _NumberBlocks extends StatelessWidget {
   }
 
   Widget numberBlock({
-    Color? borderColor,
     Color? bgColor = const Color(0xFFeff2e9),
     required int index,
     required int value,
     bool isHint = false,
-    bool isRevealed = false,
+    bool isSelected = false,
+    bool triggerHint = false,
     required VoidCallback onTap,
   }) {
-    return Material(
-      child: InkWell(
-        onTap: onTap,
-        child: Container(
-          width: 90,
-          height: 90,
-          alignment: Alignment(0.0, 0.0),
-          decoration: BoxDecoration(
-              color: Color(0xFFeff2e9),
-              border: Border.all(
-                color: isHint
-                        ? Colors.yellow.withOpacity(0.5)
-                        : bgColor!,
-                width: 3,
-              ),
-              borderRadius: BorderRadius.circular(10)),
-          child: Text(
-            value.toString(),
-            style: TextStyle(
-                color: Colors.black, fontSize: 30, fontWeight: FontWeight.bold),
+    return Animate(
+      key: ValueKey('${index}_${isHint}_${triggerHint}'),
+      effects: isHint
+          ? [
+              ShakeEffect(duration: 700.ms, hz: 10),
+            ]
+          : [],
+      child: Material(
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            width: 90,
+            height: 90,
+            alignment: Alignment(0.0, 0.0),
+            decoration: BoxDecoration(
+                color: Color(0xFFeff2e9),
+                border: Border.all(
+                  color: isSelected ? bgColor! : borderColor,
+                  width: 3,
+                ),
+                borderRadius: BorderRadius.circular(10)),
+            child: Text(
+              value.toString(),
+              style: TextStyle(
+                  color: textColor, fontSize: 30, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
       ),

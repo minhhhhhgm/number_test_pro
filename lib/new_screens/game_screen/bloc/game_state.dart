@@ -23,6 +23,8 @@ class GameState extends Equatable {
   final Duration countdown;
   final bool isCountingDown;
   final bool triggerAnswerQuestion, isCorrectAnswer, isInCorrectAnswer;
+  final bool triggerCountdown;
+  final int correctAnswers, wrongAnswers;
 
   const GameState(
       {required this.target,
@@ -43,7 +45,10 @@ class GameState extends Equatable {
       this.countdown = const Duration(seconds: 60),
       this.triggerAnswerQuestion = false,
       this.isCorrectAnswer = false,
-      this.isInCorrectAnswer = false});
+      this.isInCorrectAnswer = false,
+      this.triggerCountdown = false,
+      this.correctAnswers = 0,
+      this.wrongAnswers = 0});
 
   factory GameState.initial() => GameState(
       target: 0,
@@ -62,7 +67,10 @@ class GameState extends Equatable {
       message: null,
       triggerAnswerQuestion: false,
       isCorrectAnswer: false,
-      isInCorrectAnswer: false);
+      isInCorrectAnswer: false,
+      triggerCountdown: false,
+      correctAnswers: 0,
+      wrongAnswers: 0);
 
   GameState copyWith(
       {int? target,
@@ -83,7 +91,10 @@ class GameState extends Equatable {
       bool? isCountingDown,
       bool? triggerAnswerQuestion,
       bool? isCorrectAnswer,
-      bool? isInCorrectAnswer}) {
+      bool? isInCorrectAnswer,
+      bool? triggerCountdown,
+      int? correctAnswers,
+      int? wrongAnswers}) {
     return GameState(
         target: target ?? this.target,
         blocks: blocks ?? this.blocks,
@@ -104,7 +115,10 @@ class GameState extends Equatable {
         triggerAnswerQuestion:
             triggerAnswerQuestion ?? this.triggerAnswerQuestion,
         isCorrectAnswer: isCorrectAnswer ?? this.isCorrectAnswer,
-        isInCorrectAnswer: isInCorrectAnswer ?? this.isInCorrectAnswer);
+        isInCorrectAnswer: isInCorrectAnswer ?? this.isInCorrectAnswer,
+        triggerCountdown: triggerCountdown ?? this.triggerCountdown,
+        correctAnswers: correctAnswers ?? this.correctAnswers,
+        wrongAnswers: wrongAnswers ?? this.wrongAnswers);
   }
 
   @override
@@ -127,7 +141,10 @@ class GameState extends Equatable {
         isCountingDown,
         triggerAnswerQuestion,
         isCorrectAnswer,
-        isInCorrectAnswer
+        isInCorrectAnswer,
+        triggerCountdown,
+        correctAnswers,
+        wrongAnswers
       ];
 }
 

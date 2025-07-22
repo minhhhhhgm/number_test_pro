@@ -21,3 +21,9 @@ class UpdateScoreEvent extends HomeEvent {
 
   UpdateScoreEvent({required this.score});
 }
+
+class UpdatePointEvent extends HomeEvent {
+  final int point;
+
+  UpdatePointEvent({required this.point});
+}

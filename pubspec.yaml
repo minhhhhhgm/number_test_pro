@@ -26,7 +26,7 @@ dependencies:
   timeago: ^3.7.1
   firebase_core: ^3.14.0
   # firebase_analytics: ^11.3.0
-  firebase_crashlytics: ^4.3.7
+  # firebase_crashlytics: ^4.3.7
   flutter_launcher_icons: ^0.14.4
   cloud_firestore: ^5.6.9
   faker: ^2.2.0
@@ -39,6 +39,9 @@ dependencies:
   get_it: ^8.0.3
   just_audio: ^0.10.4
   audio_session: ^0.2.2
+  flutter_animate: ^4.5.2
+  uuid: ^4.5.1
+  easy_localization: ^3.0.7+1
 
 dev_dependencies:
   flutter_test:
@@ -47,7 +50,7 @@ dev_dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/icon/icon.png"
+  image_path: "assets/icon/game_icon.png"
 
 
 # For information on the generic Dart part of this file, see the
@@ -59,6 +62,7 @@ flutter:
     - assets/images/
     - assets/icon/
     - assets/sounds/
+    - assets/translations/
 
   fonts:
     - family: BagelFatOne

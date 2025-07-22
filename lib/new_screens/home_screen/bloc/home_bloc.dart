@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final blockDataStream = getIt<BlockDataStream>();
   final scoreService = getIt<ScoreService>();
   StreamSubscription<int>? _scoreSubscription;
+  // StreamSubscription<int>? _pointSubscription;
 
   HomeBloc(super.initialState) {
     pageController = PageController();
@@ -23,10 +23,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     on<UpdateSelectedIndex>(_mapUpdateSelectedIndex);
     on<UpdatePageChangeEvent>(_mapUpdatePageChangeEvent);
     on<UpdateScoreEvent>(_onUpdateScore);
+    on<UpdatePointEvent>(_onUpdatePoint);
+
     _scoreSubscription = blockDataStream.scoreStream.listen((score) {
-      log('Score change $score');
       add(UpdateScoreEvent(score: score));
     });
+    // _pointSubscription = blockDataStream.pointStream.listen((point) {
+    //   add(UpdatePointEvent(point: point));
+    // });
 
     add(InitEvent());
   }
@@ -35,6 +39,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> close() async {
     pageController.dispose();
     _scoreSubscription?.cancel();
+    // _pointSubscription?.cancel();
     return super.close();
   }
 
@@ -42,9 +47,15 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     emit(state.copyWith(score: event.score));
   }
 
+  void _onUpdatePoint(UpdatePointEvent event, Emitter<HomeState> emit) async {
+    emit(state.copyWith(point: event.point));
+  }
+
   void _onInit(InitEvent event, Emitter<HomeState> emit) async {
     final score = await scoreService.getScore();
-    emit(state.copyWith(score: score));
+    final point = await scoreService.getPoint();
+
+    emit(state.copyWith(score: score, point: point));
   }
 
   void _mapUpdateSelectedIndex(
