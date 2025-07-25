@@ -90,6 +90,7 @@ class _GameMode extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(width: 2,),
             Image.asset(
               iconGamePath,
               height: 100,

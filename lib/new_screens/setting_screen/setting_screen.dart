@@ -12,7 +12,8 @@ class SettingsUIDemoScreen extends StatefulWidget {
   State<SettingsUIDemoScreen> createState() => _SettingsUIDemoScreenState();
 }
 
-class _SettingsUIDemoScreenState extends State<SettingsUIDemoScreen> {
+class _SettingsUIDemoScreenState extends State<SettingsUIDemoScreen>
+    with AutomaticKeepAliveClientMixin {
   bool _isSoundOn = true;
   String _currentLanguage = 'vi';
   bool _isLoading = true;
@@ -57,6 +58,7 @@ class _SettingsUIDemoScreenState extends State<SettingsUIDemoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (_isLoading) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()),
@@ -72,7 +74,7 @@ class _SettingsUIDemoScreenState extends State<SettingsUIDemoScreen> {
               TextStyle(color: Color(0xFF5D5D5D), fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: const Color(0xFFF0E0B8),
+        backgroundColor: const Color(0xFFF0E0B8).withOpacity(0.2),
         foregroundColor: const Color(0xFF5D5D5D),
         elevation: 0,
       ),
@@ -186,4 +188,8 @@ class _SettingsUIDemoScreenState extends State<SettingsUIDemoScreen> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

@@ -74,7 +74,7 @@ class MainSoundService {
     try {
       await _musicPlayer.setAsset(backgroundPath);
       await _musicPlayer.setLoopMode(LoopMode.one);
-      await _musicPlayer.setVolume(0.5);
+      await _musicPlayer.setVolume(0.3);
       await _musicPlayer.play();
       isPlaying = true;
     } catch (e) {
@@ -101,7 +101,7 @@ class MainSoundService {
     try {
       await _musicPlayer.setAsset(backgroundPath);
       await _musicPlayer.setLoopMode(LoopMode.one);
-      await _musicPlayer.setVolume(0.5);
+      await _musicPlayer.setVolume(0.3);
       await _musicPlayer.play();
       isPlaying = true;
     } catch (e) {
@@ -149,7 +149,7 @@ class MainSoundService {
 
     try {
       await _effectPlayer.setAsset(selectedSound);
-      await _effectPlayer.setVolume(1.0);
+      await _effectPlayer.setVolume(2);
       await _effectPlayer.play();
     } catch (e) {
       print('Error playing incorrect sound: $e -- $randomIndex');
@@ -167,7 +167,7 @@ class MainSoundService {
 
     try {
       await _effectPlayer.setAsset(selectedSound);
-      await _effectPlayer.setVolume(1.0);
+      await _effectPlayer.setVolume(2);
       await _effectPlayer.play();
     } catch (e) {
       print('Error playing incorrect sound: $e -- $randomIndex');

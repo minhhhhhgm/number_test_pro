@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="number_flutter"
+        android:label="Number Match Pro"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

@@ -72,10 +72,10 @@ class RankBloc extends Bloc<RankEvent, RankState> {
       } finally {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (currentRank != null &&
-              currentRank! >= 8 &&
+              currentRank! >= 5 &&
               controller.hasClients) {
             controller.animateTo(
-              (currentRank!.toDouble() - 3) * 60,
+              (currentRank!.toDouble() - 3) * 70,
               duration: Duration(seconds: 2),
               curve: Curves.fastOutSlowIn,
             );

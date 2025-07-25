@@ -101,284 +101,253 @@ class _BodyRank extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          color: Color(0xFFF0E0B8).withOpacity(0.7),
+          color: const Color(0xFFF0E0B8).withOpacity(0.7),
         ),
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.only(
-                  top: 50, left: 20, right: 20, bottom: 20),
-              color: const Color(0xFFF0E0B8).withOpacity(0.7),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          'leader_board'.tr(),
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xFF5D5D5D),
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+        child: Stack(children: [
+          CustomScrollView(
+            controller: context.read<RankBloc>().controller,
+            slivers: [
+              SliverAppBar(
+                  backgroundColor: Color(0xFFF0E0B8),
+                  pinned: true,
+                  expandedHeight: 400,
+                  forceMaterialTransparency: true,
+                  flexibleSpace: FlexibleSpaceBar(
+                    background: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF0E0B8).withOpacity(0.7),
                       ),
-                    ],
-                  ),
-                  // const SizedBox(height: 20),
-                  BlocSelector<RankBloc, RankState, bool>(
-                    selector: (state) => state.loading,
-                    builder: (context, loading) {
-                      if (loading) {
-                        return const CircularProgressIndicator();
-                      }
-                      return BlocSelector<RankBloc, RankState, List<RankModel>>(
-                        selector: (state) => state.listRank ?? [],
-                        builder: (context, listRank) {
-                          final top3 = listRank.take(3).toList();
-                          return _BuildTop(top3: top3);
-                        },
-                      );
-                    },
-                  )
-                ],
-              ),
-            ),
-            Expanded(
-              child: Stack(
-                children: [
-                  /// ListView chính
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
+                      child: Column(
+                        children: [
+                          Center(
+                            child: SafeArea(
+                              child: Text(
+                                'leader_board'.tr(),
+                                style: const TextStyle(
+                                  color: Color(0xFF5D5D5D),
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          BlocSelector<RankBloc, RankState, bool>(
+                            selector: (state) => state.loading,
+                            builder: (context, loading) {
+                              if (loading) {
+                                return const CircularProgressIndicator();
+                              }
+                              return BlocSelector<RankBloc, RankState,
+                                  List<RankModel>>(
+                                selector: (state) => state.listRank ?? [],
+                                builder: (context, listRank) {
+                                  final top3 = listRank.take(3).toList();
+                                  return _BuildTop(top3: top3);
+                                },
+                              );
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                      top: 20,
-                    ), // thêm bottom padding để tránh bị che
-                    child: BlocSelector<RankBloc, RankState, bool>(
-                      selector: (state) => state.loading,
-                      builder: (context, loading) {
-                        if (loading) {
-                          return const Center(
-                              child: CircularProgressIndicator());
-                        }
-                        return BlocSelector<RankBloc, RankState,
-                            List<RankModel>>(
-                          selector: (state) => state.listRank ?? [],
-                          builder: (context, listRank) {
-                            final restOfLeaders = listRank.skip(3).toList();
-                            return ListView.builder(
-                              controller: context.read<RankBloc>().controller,
-                              padding: EdgeInsets.zero,
-                              itemCount: restOfLeaders.length,
-                              itemBuilder: (context, index) {
-                                final entry = restOfLeaders[index];
-                                final isLastItem =
-                                    index == restOfLeaders.length - 1;
-                                return Animate(
-                                  key: ValueKey(
-                                      '${index}_${entry.isCurrentPlayer}'),
-                                  effects: entry.isCurrentPlayer
-                                      ? [
-                                          ShakeEffect(
-                                            duration: 800.ms,
-                                            hz: 4,
-                                            offset: const Offset(2, 2),
-                                            curve: Curves.easeInOut,
-                                          ),
-                                          TintEffect(
-                                            color:
-                                                Colors.orange.withOpacity(0.1),
-                                            duration: 800.ms,
-                                          ),
-                                        ]
-                                      : [],
-                                  onPlay: (controller) => controller.repeat(
-                                      period: Duration(seconds: 3), count: 4),
-                                  child: Column(
-                                    children: [
-                                      Container(
-                                        margin:
-                                            const EdgeInsets.only(bottom: 10),
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 15),
-                                        decoration: BoxDecoration(
-                                          color: entry.isCurrentPlayer
-                                              ? Colors.blueAccent
-                                                  .withOpacity(0.2)
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.1),
-                                              spreadRadius: 1,
-                                              blurRadius: 5,
-                                              offset: const Offset(0, 3),
-                                            ),
-                                          ],
-                                          border: Border.all(
-                                              color: Color(0xFF5B6E64),
-                                              width: 2),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            SizedBox(
-                                              width: 30,
-                                              child: Text(
-                                                '${entry.rank < 10 ? '0' : ''}${entry.rank}',
-                                                style: const TextStyle(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Color(0xFF5D5D5D),
-                                                ),
-                                              ),
-                                            ),
-                                            const SizedBox(width: 15),
-                                            _PlayerAvatar(
-                                              playerName: entry.name,
-                                              radius: 20,
-                                            ),
-                                            const SizedBox(width: 15),
-                                            Expanded(
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    entry.name,
-                                                    style: const TextStyle(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Color(0xFF5D5D5D),
-                                                    ),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      Image.asset(
-                                                        'assets/icon/star.png',
-                                                        width: 16,
-                                                        height: 16,
-                                                      ),
-                                                      const SizedBox(width: 2),
-                                                      Text(
-                                                        '${entry.highScore}',
-                                                        style: const TextStyle(
-                                                          fontSize: 14,
-                                                          color: Colors.black,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ],
+                  )),
+
+              // CONTENT (list)
+              BlocSelector<RankBloc, RankState, bool>(
+                selector: (state) => state.loading,
+                builder: (context, loading) {
+                  if (loading) {
+                    return const SliverFillRemaining(
+                      child: Center(child: CircularProgressIndicator()),
+                    );
+                  }
+
+                  return BlocSelector<RankBloc, RankState, List<RankModel>>(
+                    selector: (state) => state.listRank ?? [],
+                    builder: (context, listRank) {
+                      final rest = listRank.skip(3).toList();
+                      return SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final entry = rest[index];
+                            final isLast = index == rest.length - 1;
+
+                            return Animate(
+                              key:
+                                  ValueKey('${index}_${entry.isCurrentPlayer}'),
+                              effects: entry.isCurrentPlayer
+                                  ? [
+                                      ShakeEffect(
+                                        duration: 800.ms,
+                                        hz: 4,
+                                        offset: const Offset(2, 2),
+                                        curve: Curves.easeInOut,
+                                      ),
+                                      TintEffect(
+                                        color: Colors.orange.withOpacity(0.1),
+                                        duration: 800.ms,
+                                      ),
+                                    ]
+                                  : [],
+                              onPlay: (controller) => controller.repeat(
+                                  period: 3.seconds, count: 4),
+                              child: Container(
+                                margin: EdgeInsets.fromLTRB(
+                                    20, 10, 20, isLast ? 80 : 5),
+                                padding: const EdgeInsets.all(12),
+                                decoration: BoxDecoration(
+                                  color: entry.isCurrentPlayer
+                                      ? Colors.blueAccent.withOpacity(0.2)
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(15),
+                                  border: Border.all(
+                                    color: const Color(0xFF5B6E64),
+                                    width: 2,
+                                  ),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.grey.withOpacity(0.1),
+                                      spreadRadius: 1,
+                                      blurRadius: 5,
+                                      offset: const Offset(0, 3),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 30,
+                                      child: Text(
+                                        '${entry.rank < 10 ? '0' : ''}${entry.rank}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xFF5D5D5D),
                                         ),
                                       ),
-                                      if (isLastItem)
-                                        const SizedBox(
-                                          height: 80,
-                                        )
-                                    ],
-                                  ),
-                                );
-                              },
+                                    ),
+                                    const SizedBox(width: 15),
+                                    _PlayerAvatar(
+                                      playerName: entry.name,
+                                      radius: 20,
+                                    ),
+                                    const SizedBox(width: 15),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            entry.name,
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xFF5D5D5D),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                'assets/icon/star.png',
+                                                width: 16,
+                                                height: 16,
+                                              ),
+                                              const SizedBox(width: 2),
+                                              Text(
+                                                '${entry.highScore}',
+                                                style: const TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
                             );
                           },
+                          childCount: rest.length,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
+          Positioned(
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: BlocSelector<RankBloc, RankState, (bool, bool, int?)>(
+              selector: (state) =>
+                  (state.isRegisterRank, state.isOnTop, state.currentRank),
+              builder: (context, record) {
+                final isRegisterRank = record.$1;
+                return GestureDetector(
+                  onTap: () {
+                    if (!isRegisterRank) {
+                      _showSetNameDialog(context);
+                      return;
+                    }
+                    context
+                        .read<HomeBloc>()
+                        .add(UpdateSelectedIndex(selectedIndex: 0));
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 15),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF0E0B8),
+                      borderRadius: BorderRadius.circular(30),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFF0E0B8),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: BlocSelector<RankBloc, RankState, String?>(
+                      selector: (state) => state.currentName,
+                      builder: (context, currentName) {
+                        return Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'start_rank_now'.tr(namedArgs: {'name': ''}),
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF5B6E64),
+                              ),
+                            ),
+                            if (currentName != null)
+                              Text(
+                                ' $currentName',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.blue,
+                                ),
+                              ),
+                          ],
                         );
                       },
                     ),
                   ),
-
-                  /// Nút đua rank nếu không phải người chơi hiện tại
-                  BlocSelector<RankBloc, RankState, (bool, bool, int?)>(
-                    selector: (state) => (
-                      state.isRegisterRank,
-                      state.isOnTop,
-                      state.currentRank
-                    ),
-                    builder: (context, record) {
-                      final isRegisterRank = record.$1;
-                      // final isOnTop = record.$2;
-                      // final currentRank = record.$3;
-
-                      return Positioned(
-                        left: 20,
-                        right: 20,
-                        bottom: 20,
-                        child: GestureDetector(
-                          onTap: () {
-                            if (!isRegisterRank) {
-                              _showSetNameDialog(context);
-                              return;
-                            }
-                            context
-                                .read<HomeBloc>()
-                                .add(UpdateSelectedIndex(selectedIndex: 0));
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 15),
-                            decoration: BoxDecoration(
-                              color: Color(0xFFF0E0B8),
-                              borderRadius: BorderRadius.circular(30),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color(0xFFF0E0B8),
-                                  blurRadius: 10,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            alignment: Alignment.center,
-                            child: BlocSelector<RankBloc, RankState, String?>(
-                              selector: (state) => state.currentName,
-                              builder: (context, currentName) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'start_rank_now'
-                                          .tr(namedArgs: {'name': ''}),
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xFF5B6E64),
-                                      ),
-                                    ),
-                                    if (currentName != null)
-                                      Text(
-                                        ' ${currentName.toString()}',
-                                        style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.blue,
-                                        ),
-                                      ),
-                                  ],
-                                );
-                              },
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
+                );
+              },
+            ),
+          ),
+        ]),
       ),
     );
   }
