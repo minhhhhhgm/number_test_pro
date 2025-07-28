@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:numbers/models/rank_model.dart';
-import 'package:numbers/new_screens/test_rank/rank_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
 
@@ -65,9 +64,6 @@ class Service {
 
         final userDocRef =
             _firestore.collection(_leaderboardCollection).doc(deviceId);
-        final userDocSnapshot = await transaction.get(userDocRef);
-        final int existingHighScore =
-            userDocSnapshot.data()?['highScore'] as int? ?? 0;
 
         if (newUsernameSnapshot.exists) {
           final existingUserId =
@@ -120,7 +116,8 @@ class Service {
 
     if (playerName == null || playerName.isEmpty) {
       print("❗ Lỗi: Người chơi chưa có tên. Không thể cập nhật điểm.");
-      throw Exception("Vui lòng đặt tên trước khi cập nhật điểm!");
+      return;
+      // throw Exception("Vui lòng đặt tên trước khi cập nhật điểm!");
     }
 
     print('\n--- Cập nhật điểm: $score cho "$playerName" ---');
@@ -138,7 +135,6 @@ class Service {
             {
               'name': playerName,
               'highScore': score,
-              // 'lastUpdated': DateTime.now().millisecondsSinceEpoch, // Không cần thiết
               'deviceId': deviceId,
             },
             SetOptions(merge: true));

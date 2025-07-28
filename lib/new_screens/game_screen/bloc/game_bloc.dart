@@ -8,6 +8,7 @@ import 'package:numbers/provider/BlockDataStream.dart';
 import 'package:numbers/service/score_service.dart';
 import 'package:numbers/service/sound_service.dart';
 import 'package:numbers/utils/game_config.dart';
+import 'package:numbers/new_screens/test_rank/service.dart';
 
 import '../../../schema/BlockSchema.dart';
 import 'game_event.dart';
@@ -20,6 +21,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final soundService = getIt<MainSoundService>();
   final scoreService = getIt<ScoreService>();
   final config = getIt<GameConfig>();
+  final rankService = getIt<Service>();
 
   Timer? _timer;
   double currentTotal = 0;
@@ -251,6 +253,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     // final point = await scoreService.getPoint();
 
     blockDataStream.setScore(score: score ?? 0);
+    await rankService.updateHighScore(score: score ?? 0);
     // blockDataStream.setPoint(point: point ?? 0);
   }
 

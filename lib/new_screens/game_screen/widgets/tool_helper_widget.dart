@@ -18,35 +18,53 @@ class _ToolHelperWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconCustom(
+              text: '+20s',
               onTap: () {
                 context.read<GameBloc>().add(AddTime());
               },
+              color: borderColor,
               icon: Icons.more_time),
           SizedBox(
             width: 30,
           ),
           IconCustom(
+              text: 'Hint',
               onTap: () {
                 context.read<GameBloc>().add(HintUsed());
               },
+              color: borderColor,
               icon: Icons.lightbulb_outline),
           SizedBox(
             width: 30,
           ),
           IconCustom(
+              text: 'Next',
               onTap: () {
                 context.read<GameBloc>().add(NextTurn());
               },
+              color: borderColor,
               icon: Icons.skip_next),
         ],
       ),
     );
   }
 
-  Widget IconCustom({IconData? icon, required Function() onTap}) {
-    return IconButton(
-      icon: Icon(icon, size: 32, color: borderColor),
-      onPressed: onTap,
+  Widget IconCustom(
+      {IconData? icon,
+      required Function() onTap,
+      required String text,
+      Color? color}) {
+    return Column(
+      children: [
+        InkWell(onTap: onTap, child: Padding(
+          padding: const EdgeInsets.only(top: 8.0, bottom: 4, left: 8, right: 8),
+          child: Icon(icon, size: 32, color: borderColor),
+        )),
+        Text(
+          text,
+          style: TextStyle(fontWeight: FontWeight.bold, color: color),
+        )
+      ],
     );
   }
 }

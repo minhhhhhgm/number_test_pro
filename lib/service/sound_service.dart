@@ -186,6 +186,26 @@ class MainSoundService {
     }
   }
 
+  Future<void> pauseSounds() async {
+    final prefs = await SharedPreferences.getInstance();
+    isSoundEnable = await prefs.getBool('isSoundEnable')!;
+    if (!isSoundEnable) return;
+
+    await _musicPlayer.pause();
+    await _effectPlayer.pause();
+    isPlaying = false;
+  }
+
+  Future<void> resumeSounds() async {
+    final prefs = await SharedPreferences.getInstance();
+    isSoundEnable = await prefs.getBool('isSoundEnable')!;
+    if (!isSoundEnable) return;
+
+    await _musicPlayer.play();
+    await _effectPlayer.play();
+    isPlaying = true;
+  }
+
   Future<void> dispose() async {
     final prefs = await SharedPreferences.getInstance();
     isSoundEnable = await prefs.getBool('isSoundEnable')!;
