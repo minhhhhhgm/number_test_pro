@@ -155,7 +155,7 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: true,
+      canPop: false,
       child: MultiBlocListener(
         listeners: [
           BlocListener<GameBloc, GameState>(
@@ -214,16 +214,107 @@ class _Body extends StatelessWidget {
             children: [
               SafeArea(
                 top: true,
-                child: BlocSelector<GameBloc, GameState, int>(
-                  selector: (state) => state.secCounter,
-                  builder: (context, secCounter) {
-                    return _Header(
-                      secCounter: secCounter,
-                      score: 6,
-                      textColor: textColor,
-                      backgroundColorCountDown: backgroundColorCountDown,
-                      foregroundColorCountDown: foregroundColorCountDown,
-                      borderColor: borderColor,
+                child: BlocSelector<GameBloc, GameState, GameDifficulty>(
+                  selector: (state) => state.gameDifficulty,
+                  builder: (context, gameDifficulty) {
+                    if (gameDifficulty != GameDifficulty.chill) {
+                      return BlocSelector<GameBloc, GameState, int>(
+                        selector: (state) => state.secCounter,
+                        builder: (context, secCounter) {
+                          return _Header(
+                            secCounter: secCounter,
+                            score: 6,
+                            textColor: textColor,
+                            backgroundColorCountDown: backgroundColorCountDown,
+                            foregroundColorCountDown: foregroundColorCountDown,
+                            borderColor: borderColor,
+                            onBack: () {
+                              showGameSummaryDialog(
+                                context: context,
+                                correctAnswers: context
+                                    .read<GameBloc>()
+                                    .state
+                                    .correctAnswers,
+                                incorrectAnswers:
+                                    context.read<GameBloc>().state.wrongAnswers,
+                                score: context.read<GameBloc>().state.score,
+                                onReplay: () {
+                                  context.read<GameBloc>().add(PlayAgain());
+                                },
+                                onHome: () {
+                                  context.read<GameBloc>().add(GameDone());
+                                  Navigator.of(context).pop();
+                                },
+                              );
+                            },
+                          );
+                        },
+                      );
+                    }
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: InkWell(
+                              onTap: () {
+                                showGameSummaryDialog(
+                                  context: context,
+                                  correctAnswers: context
+                                      .read<GameBloc>()
+                                      .state
+                                      .correctAnswers,
+                                  incorrectAnswers: context
+                                      .read<GameBloc>()
+                                      .state
+                                      .wrongAnswers,
+                                  score: context.read<GameBloc>().state.score,
+                                  onReplay: () {
+                                    context.read<GameBloc>().add(PlayAgain());
+                                  },
+                                  onHome: () {
+                                    context.read<GameBloc>().add(GameDone());
+                                    Navigator.of(context).pop();
+                                  },
+                                );
+                              },
+                              child: Icon(Icons.arrow_back_ios)),
+                        ),
+                        Container(
+                          height: 35,
+                          padding: EdgeInsets.symmetric(horizontal: 8),
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(color: borderColor, width: 2),
+                              borderRadius: BorderRadius.circular(8)),
+                          child: BlocSelector<GameBloc, GameState, int>(
+                            selector: (state) => state.score,
+                            builder: (context, score) {
+                              return Row(
+                                children: [
+                                  Image.asset(
+                                    'assets/icon/star.png',
+                                    width: 24,
+                                    height: 24,
+                                  ),
+                                  SizedBox(
+                                    width: 2,
+                                  ),
+                                  Text(
+                                    '$score',
+                                    style: TextStyle(
+                                        color: textColor,
+                                        fontWeight: FontWeight.bold),
+                                  )
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(
+                          width: 38,
+                        )
+                      ],
                     );
                   },
                 ),

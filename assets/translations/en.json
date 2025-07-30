@@ -23,5 +23,8 @@
   "leader_board": "Leader Board",
   "enter_player_info": "Let me know your info, Pro! Fight for the top 1!",
   "enter_your_name": "Enter your name",
-  "fight": "Let’s fight!"
+  "fight": "Let’s fight!",
+  "chill_mode": "Chill mode, no time limit",
+  "hint":"Hint",
+  "skip":"Skip"
 }

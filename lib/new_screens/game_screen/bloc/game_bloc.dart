@@ -127,7 +127,9 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   Future<void> _onGameStarted(
       GameStarted event, Emitter<GameState> emit) async {
-    _startTimer(emit);
+    if (config.gameMode != GameDifficulty.chill) {
+      _startTimer(emit);
+    }
     _fillBlocksData(emit);
   }
 
@@ -144,7 +146,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     currentTotal = 0;
 
     emit(state.copyWith(
-        target: blockSchemaNew.target, blocksNew: blocks, hintCount: 0));
+        target: blockSchemaNew.target,
+        blocksNew: blocks,
+        hintCount: 0,
+        gameDifficulty: config.gameMode));
   }
 
   Future<void> _onBlockSelected(

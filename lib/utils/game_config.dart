@@ -47,6 +47,22 @@ class GameConfig {
 
   static GameConfig fromDifficulty(GameDifficulty difficulty) {
     switch (difficulty) {
+      case GameDifficulty.chill:
+        return GameConfig(
+          blockSize: 6,
+          minTarget: 5,
+          maxTarget: 50,
+          correctCombinationLength: 2,
+          timePlay: 60,
+          textColor: const Color(0xFF4A665A),
+          borderColor: const Color(0xFFA7C4B5),
+          backgroundColorCountDown: const Color(0xFFC8E6C9),
+          foregroundColorCountDown: const Color(0xFF81C784),
+          backgroundColor: const Color(0xFFF0FDF6),
+          gameMode: GameDifficulty.chill,
+          pointBonus: 1,
+        );
+
       case GameDifficulty.easy:
         return GameConfig(
             blockSize: 6,
@@ -107,4 +123,4 @@ class GameConfig {
   }
 }
 
-enum GameDifficulty { easy, normal, hard, crazy }
+enum GameDifficulty { chill, easy, normal, hard, crazy }

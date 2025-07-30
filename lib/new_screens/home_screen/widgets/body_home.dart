@@ -47,7 +47,7 @@ class _BodyHomeState extends State<_BodyHome>
               flexibleSpace: FlexibleSpaceBar(
                 centerTitle: true,
                 background: Stack(
-                  fit: StackFit.expand, // Đảm bảo Stack lấp đầy không gian
+                  fit: StackFit.expand,
                   children: [
                     ImageFiltered(
                       imageFilter: ImageFilter.blur(sigmaX: 4, sigmaY: 4),
@@ -111,20 +111,25 @@ class _BodyHomeState extends State<_BodyHome>
             SliverToBoxAdapter(
               child: Container(
                 decoration: BoxDecoration(
-                  // color: Color(0xFFf3f1ed),
                   border: Border(
                     top: BorderSide(width: 1.0, color: Color(0xFFe6e8e7)),
                     left: BorderSide(width: 1.0, color: Color(0xFFe6e8e7)),
                     right: BorderSide(width: 1.0, color: Color(0xFFe6e8e7)),
                   ),
-                  // borderRadius: BorderRadius.only(
-                  //   topLeft: Radius.circular(28),
-                  //   topRight: Radius.circular(28),
-                  // ),
                 ),
                 padding: const EdgeInsets.all(22.0),
                 child: Column(
                   children: [
+                    _GameMode(
+                      titleGame: '🧘 Chill Mode',
+                      descriptionGame: tr('chill_mode'),
+                      iconGamePath: 'assets/icon/chill.png',
+                      backgroundColor: Color(0xFFA8DADC),
+                      borderColor: Color(0xFF6C9A9F),
+                      gameMode: GameDifficulty.chill,
+                      onTap: (gameMode) => _onNavigateGameScreen(gameMode),
+                    ),
+                    SizedBox(height: 16),
                     _GameMode(
                       titleGame: '🟢 Easy Mode',
                       descriptionGame: tr('relax_mode'),

@@ -25,6 +25,7 @@ class GameState extends Equatable {
   final bool triggerAnswerQuestion, isCorrectAnswer, isInCorrectAnswer;
   final bool triggerCountdown;
   final int correctAnswers, wrongAnswers;
+  final GameDifficulty gameDifficulty;
 
   const GameState(
       {required this.target,
@@ -48,7 +49,8 @@ class GameState extends Equatable {
       this.isInCorrectAnswer = false,
       this.triggerCountdown = false,
       this.correctAnswers = 0,
-      this.wrongAnswers = 0});
+      this.wrongAnswers = 0,
+      required this.gameDifficulty});
 
   factory GameState.initial() => GameState(
       target: 0,
@@ -70,7 +72,8 @@ class GameState extends Equatable {
       isInCorrectAnswer: false,
       triggerCountdown: false,
       correctAnswers: 0,
-      wrongAnswers: 0);
+      wrongAnswers: 0,
+      gameDifficulty: getIt<GameConfig>().gameMode);
 
   GameState copyWith(
       {int? target,
@@ -94,7 +97,8 @@ class GameState extends Equatable {
       bool? isInCorrectAnswer,
       bool? triggerCountdown,
       int? correctAnswers,
-      int? wrongAnswers}) {
+      int? wrongAnswers,
+      GameDifficulty? gameDifficulty}) {
     return GameState(
         target: target ?? this.target,
         blocks: blocks ?? this.blocks,
@@ -118,7 +122,8 @@ class GameState extends Equatable {
         isInCorrectAnswer: isInCorrectAnswer ?? this.isInCorrectAnswer,
         triggerCountdown: triggerCountdown ?? this.triggerCountdown,
         correctAnswers: correctAnswers ?? this.correctAnswers,
-        wrongAnswers: wrongAnswers ?? this.wrongAnswers);
+        wrongAnswers: wrongAnswers ?? this.wrongAnswers,
+        gameDifficulty: gameDifficulty ?? this.gameDifficulty);
   }
 
   @override
@@ -144,7 +149,8 @@ class GameState extends Equatable {
         isInCorrectAnswer,
         triggerCountdown,
         correctAnswers,
-        wrongAnswers
+        wrongAnswers,
+        gameDifficulty
       ];
 }
 

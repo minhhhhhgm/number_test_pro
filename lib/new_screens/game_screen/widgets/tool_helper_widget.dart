@@ -28,7 +28,7 @@ class _ToolHelperWidget extends StatelessWidget {
             width: 30,
           ),
           IconCustom(
-              text: 'Hint',
+              text: tr('hint'),
               onTap: () {
                 context.read<GameBloc>().add(HintUsed());
               },
@@ -38,7 +38,7 @@ class _ToolHelperWidget extends StatelessWidget {
             width: 30,
           ),
           IconCustom(
-              text: 'Next',
+              text: tr('skip'),
               onTap: () {
                 context.read<GameBloc>().add(NextTurn());
               },

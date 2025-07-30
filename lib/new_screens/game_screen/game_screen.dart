@@ -10,6 +10,7 @@ import 'package:numbers/new_screens/game_screen/bloc/game_event.dart';
 import 'package:numbers/new_screens/game_screen/bloc/game_state.dart';
 import 'package:numbers/schema/BlockSchema.dart';
 import 'package:numbers/service/sound_service.dart';
+import 'package:numbers/utils/game_config.dart';
 
 part 'widgets/body.dart';
 part 'widgets/header.dart';

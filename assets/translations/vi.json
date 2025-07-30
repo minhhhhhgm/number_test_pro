@@ -23,5 +23,8 @@
   "leader_board": "Bảng Xếp Hạng",
   "enter_player_info": "Cho tui xin thông tin của Pro với, chiến đấu cho top 1 nào",
   "enter_your_name": "Nhập tên của bạn",
-  "fight": "Chiến thôi"
+  "fight": "Chiến thôi",
+  "chill_mode": "Chế độ giải trí, không giới hạn thời gian",
+  "hint":"Gợi ý",
+  "skip":"Bỏ qua"
 }

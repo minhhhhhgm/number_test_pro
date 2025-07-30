@@ -209,7 +209,6 @@ class Service {
       await userDocRef.set({
         'name': newName,
         'highScore': newScore,
-        // 'lastUpdated': DateTime.now().millisecondsSinceEpoch, // Không cần thiết
         'deviceId': newId,
       }, SetOptions(merge: true));
       print(

@@ -7,7 +7,8 @@ class _Header extends StatelessWidget {
       required this.textColor,
       required this.backgroundColorCountDown,
       required this.foregroundColorCountDown,
-      required this.borderColor});
+      required this.borderColor,
+      required this.onBack});
 
   final int secCounter;
   final int score;
@@ -15,6 +16,7 @@ class _Header extends StatelessWidget {
       borderColor,
       backgroundColorCountDown,
       foregroundColorCountDown;
+  final Function() onBack;
 
   @override
   Widget build(BuildContext context) {
@@ -24,52 +26,65 @@ class _Header extends StatelessWidget {
           height: 16,
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Container(
-              height: 35,
-              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: borderColor, width: 2),
-                  borderRadius: BorderRadius.circular(8)),
-              child: Text(
-                secCounter.toString().padLeft(2, '0') + '(s)',
-                style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: InkWell(onTap: onBack, child: Icon(Icons.arrow_back_ios)),
             ),
-            const SizedBox(
-              width: 16,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  height: 35,
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: borderColor, width: 2),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: Text(
+                    secCounter.toString().padLeft(2, '0') + '(s)',
+                    style: TextStyle(
+                        color: textColor, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                const SizedBox(
+                  width: 16,
+                ),
+                Container(
+                  height: 35,
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(color: borderColor, width: 2),
+                      borderRadius: BorderRadius.circular(8)),
+                  child: BlocSelector<GameBloc, GameState, int>(
+                    selector: (state) => state.score,
+                    builder: (context, score) {
+                      return Row(
+                        children: [
+                          Image.asset(
+                            'assets/icon/star.png',
+                            width: 24,
+                            height: 24,
+                          ),
+                          SizedBox(
+                            width: 2,
+                          ),
+                          Text(
+                            '$score',
+                            style: TextStyle(
+                                color: textColor, fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                )
+              ],
             ),
-            Container(
-              height: 35,
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(color: borderColor, width: 2),
-                  borderRadius: BorderRadius.circular(8)),
-              child: BlocSelector<GameBloc, GameState, int>(
-                selector: (state) => state.score,
-                builder: (context, score) {
-                  return Row(
-                    children: [
-                      Image.asset(
-                        'assets/icon/star.png',
-                        width: 24,
-                        height: 24,
-                      ),
-                      SizedBox(
-                        width: 2,
-                      ),
-                      Text(
-                        '$score',
-                        style: TextStyle(
-                            color: textColor, fontWeight: FontWeight.bold),
-                      )
-                    ],
-                  );
-                },
-              ),
+            SizedBox(
+              width: 38,
             )
           ],
         ),
